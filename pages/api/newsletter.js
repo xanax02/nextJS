@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-import { connectDatabase, insertDocument } from "../../helpers/db-util";
+// import { connectDatabase, insertDocument } from "../../helpers/db-util";
 
 // async function handler(req, res) {
 //   if (req.method === 'POST') {
@@ -32,6 +32,18 @@ import { connectDatabase, insertDocument } from "../../helpers/db-util";
 //   }
 // }
 
+const connectDatabase = async () => {
+  const client = await MongoClient.connect(
+    "mongodb+srv://abhay:abhay888@cluster0.kwjblrz.mongodb.net/events?retryWrites=true&w=majority"
+  );
+  return client;
+};
+
+const insertDocument = async (client, documents) => {
+  const db = client.db();
+  await db.collection("newsletter").insertOne(documents);
+};
+
 const handler = async (req, res) => {
   if (req.method === "POST") {
     const userEmail = req.body.email;
@@ -55,14 +67,23 @@ const handler = async (req, res) => {
 
     // await db.collection("newsletter").insertOne({ email: userEmail });
 
-    // using helper db util file functions
+    let client;
 
-    const client = await connectDatabase();
-    const result = await insertDocument(client, "newsLetter", {
-      email: userEmail,
-    });
-    console.log(result);
-    client.close();
+    //error handling for database connection
+    try {
+      client = await connectDatabase();
+    } catch (err) {
+      res.status(500).json({ message: "Connection to database failed" });
+      return;
+    }
+    //error handling for database insertion
+    try {
+      await insertDocument(client, { email: userEmail });
+      client.close();
+    } catch (err) {
+      res.status(501).json({ message: "Insertion in database failed" });
+      return;
+    }
     res.status(201).json({ message: "success", email: userEmail });
   }
 };
