@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-// import { connectDatabase, insertDocument } from "../../helpers/db-util";
+import { connectDatabase, insertDocument } from "../../helpers/db-util";
 
 // async function handler(req, res) {
 //   if (req.method === 'POST') {
@@ -48,16 +48,22 @@ const handler = async (req, res) => {
 
     // OR By Async Await
 
-    const client = await MongoClient.connect(
-      "mongodb+srv://abhay:abhay888@cluster0.kwjblrz.mongodb.net/?retryWrites=true&w=majority"
-    );
-    const db = client.db("events");
+    // const client = await MongoClient.connect(
+    //   "mongodb+srv://abhay:abhay888@cluster0.kwjblrz.mongodb.net/events?retryWrites=true&w=majority"
+    // );
+    // const db = client.db();
 
-    await db.collection("newletter").insertOne({ email: userEmail });
+    // await db.collection("newsletter").insertOne({ email: userEmail });
+
+    // using helper db util file functions
+
+    const client = await connectDatabase();
+    const result = await insertDocument(client, "newsLetter", {
+      email: userEmail,
+    });
+    console.log(result);
     client.close();
-
-    console.log(userEmail);
-    res.status(201).json({ message: "success" });
+    res.status(201).json({ message: "success", email: userEmail });
   }
 };
 

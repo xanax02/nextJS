@@ -9,11 +9,11 @@ import { MongoClient } from "mongodb";
 // }
 
 // export async function insertDocument(client, collection, document) {
-//   const db = client.db();
+// const db = client.db();
 
-//   const result = await db.collection(collection).insertOne(document);
+// const result = await db.collection(collection).insertOne(document);
 
-//   return result;
+// return result;
 // }
 
 // export async function getAllDocuments(client, collection, sort) {
@@ -30,30 +30,20 @@ import { MongoClient } from "mongodb";
 
 export const connectDatabase = async () => {
   const client = await MongoClient.connnect(
-    "mongodb+srv://abhay:abhay888@cluster0.kwjblrz.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://abhay:abhay888@cluster0.kwjblrz.mongodb.net/events?retryWrites=true&w=majority"
   );
 
   return client;
 };
 
-export const getAllDocuments = async (
-  client,
-  collection,
-  sort,
-  filter = {}
-) => {
-  const db = client.db("events");
-  const documents = await db
-    .collection(collection)
-    .find()
-    .sort(sort)
-    .filter(filter)
-    .toArray();
+export const getAllDocuments = async (client, collection, sort) => {
+  const db = client.db();
+  const documents = await db.collection(collection).find().sort(sort).toArray();
   return documents;
 };
 
 export const insertDocument = async (client, collection, document) => {
-  const db = client.db("events");
+  const db = client.db();
   const result = await db.collection(collection).insertOne(document);
   return result;
 };

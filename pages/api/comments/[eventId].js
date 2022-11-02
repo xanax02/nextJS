@@ -102,7 +102,7 @@ const handler = async (req, res) => {
   } else {
     const documents = await db
       .collection("comments")
-      .find()
+      .find(eventId)
       .sort({ _id: -1 })
       .toArray();
     res.status(201).json({ message: "req Successfull", comments: documents });
