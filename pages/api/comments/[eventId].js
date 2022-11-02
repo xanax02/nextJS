@@ -100,13 +100,12 @@ const handler = async (req, res) => {
     console.log(result);
     res.status(201).json({ message: "SUCCESS", comment: newComment });
   } else {
-    const DUMMY_COMMENTS = [
-      { id: "c1", name: "abhay", text: "this is the first comment" },
-      { id: "c2", name: "thakur", text: "this is the second comment" },
-    ];
-    res
-      .status(201)
-      .json({ message: "req Successfull", comments: DUMMY_COMMENTS });
+    const documents = await db
+      .collection("comments")
+      .find()
+      .sort({ _id: -1 })
+      .toArray();
+    res.status(201).json({ message: "req Successfull", comments: documents });
   }
 
   client.close();
