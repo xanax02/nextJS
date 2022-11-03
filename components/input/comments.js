@@ -14,12 +14,17 @@ function Comments(props) {
 
   const notificationCtx = useContext(NotificationContext);
 
+  //for comment loading state
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (showComments) {
+      setIsLoading(true);
       fetch("/api/comments/" + eventId)
         .then((response) => response.json())
         .then((data) => {
           setComments(data.comments);
+          setIsLoading(false);
         });
     }
   }, [showComments]);
@@ -68,6 +73,7 @@ function Comments(props) {
           {showComments ? "Hide" : "Show"} Comments
         </button>
         {showComments && <NewComment onAddComment={addCommentHandler} />}
+        {isLoading && <h1>Loading .... </h1>}
         {showComments && <CommentList items={comments} />}
       </section>
       <footer>
