@@ -1,9 +1,9 @@
-import { Link } from "next/link";
+import Link from "next/link";
 import Logo from "./Logo";
 
 const MainNavigation = () => {
   return (
-    <>
+    <header>
       <Link href="/">
         <Logo />
       </Link>
@@ -17,7 +17,7 @@ const MainNavigation = () => {
           </li>
         </ul>
       </nav>
-    </>
+    </header>
   );
 };
 

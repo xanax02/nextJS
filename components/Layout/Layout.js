@@ -1,15 +1,12 @@
-import Logo from "./Logo";
+import React from "react";
 import MainNavigation from "./MainNavigation";
 
 const Layout = (props) => {
   return (
-    <>
-      <header>
-        <Logo />
-        <MainNavigation />
-      </header>
+    <React.Fragment>
+      <MainNavigation />
       <main>{props.children}</main>
-    </>
+    </React.Fragment>
   );
 };
 
