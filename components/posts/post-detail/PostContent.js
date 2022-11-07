@@ -4,21 +4,12 @@ import PostHeader from "./PostHeader";
 
 import classes from "./PostContent.module.css";
 
-const DUMMY_POST = {
-  slug: "getting-started-with-nextjs",
-  title: "Getting started with NextJs",
-  image: "getting-started-nextjs.png",
-  content: "# this is content",
-  date: "2022-10-10",
-};
-
-const imgPath = `/images/posts/${DUMMY_POST.slug}/${DUMMY_POST.image}`;
-
-const PostContent = () => {
+const PostContent = (props) => {
+  const imgPath = `/images/posts/${props.post.slug}/${props.post.image}`;
   return (
     <article className={classes.content}>
-      <PostHeader image={imgPath} title={DUMMY_POST.title} />
-      <ReactMarkdown>{DUMMY_POST.content}</ReactMarkdown>
+      <PostHeader image={imgPath} title={props.post.title} />
+      <ReactMarkdown>{props.post.content}</ReactMarkdown>
     </article>
   );
 };
