@@ -1,11 +1,7 @@
+import { hashPassword } from "../../../lib/auth";
 import { connectDB } from "../../../lib/db";
 
 const helper = async (req, res) => {
-  //Connection with db and creating client;
-  const client = await connectDB();
-  // creating or connecting to the database;
-  const db = client.db("auth-demo");
-
   const data = req.body;
 
   const { email, password } = data;
@@ -23,8 +19,16 @@ const helper = async (req, res) => {
     return;
   }
 
+  //Connection with db and creating client;
+  const client = await connectDB();
+  // creating or connecting to the database;
+  const db = client.db("auth-demo");
+
+  //hashing password
+  const hashedPass = hashPassword(password);
+
   // creating/ accessing USERS collection
-  db.collection("users").insertOne({ email: email, password: password });
+  db.collection("users").insertOne({ email: email, password: hashedPass });
 };
 
 export default helper;
