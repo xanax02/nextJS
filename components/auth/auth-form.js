@@ -1,6 +1,24 @@
 import { useState, useRef } from "react";
 import classes from "./auth-form.module.css";
 
+// signUp function
+const createUser = async (email, password) => {
+  const response = await fetch("/api/auth/signup", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+
+  // throwing error is response not ok
+  if (!response.ok) {
+    throw new Error(data.message || "Something went wrong!");
+  }
+  return data;
+};
+
 function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
 
@@ -23,15 +41,12 @@ function AuthForm() {
     if (isLogin) {
       // login for login
     } else {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      console.log(data);
+      try {
+        const result = await createUser(email, password);
+        console.log(result);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
