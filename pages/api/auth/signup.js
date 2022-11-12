@@ -28,6 +28,14 @@ const helper = async (req, res) => {
   // creating or connecting to the database;
   const db = client.db();
 
+  // chekcing if email already exists
+  const existingUser = await db.collection("users").findOne({ email: email });
+  if (existingUser) {
+    res.status(422).json({ message: "User already exists" });
+    client.close();
+    return;
+  }
+
   //hashing password
   const hashedPass = await hashPassword(password);
 
@@ -37,6 +45,7 @@ const helper = async (req, res) => {
     .insertOne({ email: email, password: hashedPass });
 
   res.status(201).json({ message: "User-Created", body: result });
+  client.close();
 };
 
 export default helper;
